@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>stocker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            mist: "#f5f7fa",
+            paper: "#ffffff",
+            ink: "#111827",
+            sage: "#16A34A",
+            rose: "#DC2626",
+            apricot: "#F59E0B",
+            lavender: "#6B7280",
+            sky: "#2563EB"
+          },
+          fontFamily: {
+            display: ["Fraunces", "serif"],
+            body: ["Manrope", "sans-serif"]
+          },
+          boxShadow: {
+            soft: "0 10px 26px rgba(15, 23, 42, 0.06)"
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css?v=20260415c" />
+</head>
+<body class="font-body text-ink bg-mist min-h-screen">
+  <div class="background-glow"></div>
+  <div class="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-10 relative z-10">
+    <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 animate-rise">
+      <div>
+        <h1 class="font-display text-4xl md:text-5xl leading-tight">stocker</h1>
+      </div>
+    </header>
+
+    <section class="grid lg:grid-cols-4 gap-5 mb-6">
+      <div class="glass-card lg:col-span-1 p-5 animate-rise delay-1">
+        <label class="text-xs uppercase tracking-[0.15em] text-ink/70">Ticker</label>
+        <input id="tickerInput" list="tickerList" class="input mt-2" placeholder="RELIANCE.NS" />
+        <datalist id="tickerList"></datalist>
+
+        <div class="mt-4">
+          <p class="text-xs uppercase tracking-[0.15em] text-ink/70 mb-2">Quick Picks</p>
+          <div id="quickPicks" class="grid grid-cols-2 gap-2"></div>
+        </div>
+
+      </div>
+
+      <div class="glass-card lg:col-span-3 p-5 animate-rise delay-2">
+        <div id="livePanel" class="mode-panel">
+          <div class="flex flex-wrap gap-2 mb-4">
+            <button id="runLive" class="btn-primary">Run Live Prediction</button>
+          </div>
+          <div id="liveMetrics" class="grid md:grid-cols-4 gap-3"></div>
+          <div class="mt-5 grid lg:grid-cols-3 gap-4">
+            <div class="soft-card p-4">
+              <p class="text-xs uppercase tracking-[0.15em] text-ink/60 mb-2">Signal</p>
+              <div id="signalBadge"></div>
+              <p id="predictionText" class="mt-3 text-sm text-ink/80"></p>
+              <div class="mt-4">
+                <p class="text-xs uppercase tracking-[0.15em] text-ink/60 mb-1">Routing Table</p>
+                <div id="routingTable" class="space-y-1 text-sm"></div>
+              </div>
+            </div>
+            <div class="soft-card p-4 lg:col-span-2">
+              <p class="text-xs uppercase tracking-[0.15em] text-ink/60 mb-2">Price & Regime (1Y)</p>
+              <div class="chart-container">
+                <canvas id="liveChart"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 soft-card p-4">
+            <p class="text-xs uppercase tracking-[0.15em] text-ink/60 mb-2">Regime Statistics (3Y)</p>
+            <div id="regimeStats" class="overflow-x-auto"></div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <div id="statusBar" class="glass-card p-4 text-sm text-ink/80 animate-rise delay-4">Ready.</div>
+  </div>
+
+  <script src="/static/app.js?v=20260415c"></script>
+</body>
+</html>

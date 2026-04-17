@@ -1,0 +1,50 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Test and tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+
+# OS/editor artifacts
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Runtime logs and temp
+*.log
+*.tmp
+*.bak
+
+# Data artifacts (keep structure, not generated payloads)
+data/cache/*
+!data/cache/.gitkeep
+data/exports/*
+!data/exports/.gitkeep
+
+# Model artifacts
+models/registry/*
+!models/registry/.gitkeep
+
+# Optional local notebooks/output
+.ipynb_checkpoints/
