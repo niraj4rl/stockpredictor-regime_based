@@ -120,6 +120,25 @@ def _normalize_ticker(raw: str) -> str:
 
     return f"{base}.NS"
 
+
+def _suggest_tickers(raw: str, limit: int = 5) -> list[str]:
+    """Suggest valid NSE symbols for user-typed ticker text."""
+    base = (raw or "").strip().upper().replace(".NS", "")
+    if not base:
+        return []
+
+    universe = list(_NSE_BASE_TO_TICKER.keys())
+    prefix_like = [b for b in universe if base[:5] and b.startswith(base[:5])]
+    contains_like = [b for b in universe if base[:4] and base[:4] in b]
+    close = difflib.get_close_matches(base, universe, n=limit * 2, cutoff=0.55)
+
+    ordered: list[str] = []
+    for candidate in prefix_like + contains_like + close:
+        if candidate not in ordered:
+            ordered.append(candidate)
+
+    return [_NSE_BASE_TO_TICKER[b] for b in ordered[:limit]]
+
 static_dir = Path(__file__).parent / "static"
 app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
@@ -194,7 +213,17 @@ def live_prediction(payload: LivePredictionRequest) -> dict:
     except Exception as exc:
         msg = str(exc)
         if ticker not in _VALID_TICKERS:
-            error = f"{ticker} does not have reliable data available. Use one of: {', '.join(_VALID_TICKERS[:5])}..."
+            suggestions = _suggest_tickers(payload.ticker)
+            if suggestions:
+                error = (
+                    f"{ticker} is not a valid/available NSE symbol. "
+                    f"Did you mean: {', '.join(suggestions)}"
+                )
+            else:
+                error = (
+                    f"{ticker} does not have reliable data available. "
+                    f"Use one of: {', '.join(_VALID_TICKERS[:5])}..."
+                )
             raise HTTPException(status_code=400, detail=error) from exc
         if "No data returned for ticker" in msg or "Insufficient history" in msg or "Stale data" in msg:
             raise HTTPException(status_code=400, detail=msg) from exc
